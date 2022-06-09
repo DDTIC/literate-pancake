@@ -23,7 +23,16 @@ header-includes: |
             pdfcreator={Emacs, Pandoc, Latex, Markdown}}
     
 ---
+### Table des matières
 
+* [Introduction](#intro)
+* [Tester votre code](#test_code)
+    * [Tests automatisés ou manuels](#auto_manuel)
+    * [Tests unitaires vs tests d'intégration](#unit_inte)
+    * [Choisir un testeur](#choix_testeur)
+* [Chapter 2](#chapter2)
+    * [Section 2.1](#section_2_1)
+    * [Section 2.2](#section_2_2)
 # Foo:
 
 foo bar baz
