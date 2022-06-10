@@ -33,6 +33,8 @@ header-includes: |
 * [Chapter 2](#chapter2)
     * [Section 2.1](#section_2_1)
     * [Section 2.2](#section_2_2)
+
+### Introduction <a class="encre" id="#intro"></a>
 # Foo:
 
 foo bar baz
