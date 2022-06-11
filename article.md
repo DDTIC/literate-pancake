@@ -1,28 +1,4 @@
----
-title: |
-  "Introduction to Python modules."
-date: May, 2022
-lang: en-EN
-urlcolor: blue
-geometry: "left=2.5cm,right=2.5cm,top=3cm,bottom=3cm"
-documentclass: article
-fontfamily: Alegreya
-header-includes: |
-    \usepackage{fancyhdr}
-    \pagestyle{fancy}
-    \fancyhf{}
-    \rhead{Dakar Institute of Technology}
-    \lhead{Patrick Nsukami}
-    \rfoot{Page \thepage}
-    \hypersetup{pdftex,
-            pdfauthor={Patrick Nsukami},
-            pdftitle={Introduction to Python programming},
-            pdfsubject={Introduction to Python programming},
-            pdfkeywords={Python, Programming},
-            pdfproducer={Emacs, Pandoc, Latex, Markdown},
-            pdfcreator={Emacs, Pandoc, Latex, Markdown}}
-    
----
+
 ### Table des matières
 
 * [Introduction](#intro)
@@ -71,7 +47,7 @@ Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et �
    Il existe de nombreuses façons de tester un code en python.  Nous apprendrons les  
    techniques des étapes les plus élémentaires et travaillerons vers des méthodes avancées.
     
-    * **Tests automatisés ou manuels** <a class="encre" id="auto_manuel"></a>
+    1. **Tests automatisés ou manuels** <a class="encre" id="auto_manuel"></a>
     
    La bonne nouvelle est que vous avez probablement déjà créé un test sans vous en rendre   
    compte. Vous souvenez-vous quand vous avez exécuté votre application et que vous l'avez    
@@ -95,7 +71,7 @@ Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et �
    des tests automatisés pour votre application. Nous allons explorer ces outils et bibliothèques 
    dans ce article.
     
-    * **Tests unitaires vs tests d'intégration** <a class="encre" id="unit_inte"></a>
+   2. **Tests unitaires vs tests d'intégration** <a class="encre" id="unit_inte"></a>
     
    Le monde des tests ne manque pas de terminologie, et maintenant que vous connaissez la  
    différence entre les tests automatisés et manuels, il est temps d'aller plus loin.
@@ -114,16 +90,78 @@ Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et �
    du système est défaillante. Si les lumières ne s'allument pas, les ampoules sont peut-être 
    cassées. La batterie est-elle morte ? Et l'alternateur ? L'ordinateur de la voiture est-il en 
    panne ?
+   
+   Si vous avez une voiture moderne et élégante, elle vous dira quand vos ampoules ont disparu. 
+   Il le fait en utilisant une forme de test unitaire .
+   
+   Un test unitaire est un test plus petit, qui vérifie qu'un seul composant fonctionne 
+   correctement. Un test unitaire vous aide à isoler ce qui est cassé dans votre application et à le 
+   réparer plus rapidement.
+   
+   Vous venez de voir deux types de tests :
+   
+     - Un test d'intégration vérifie que les composants de votre application fonctionnent les uns avec les autres.
+     
+     - Un test unitaire vérifie un petit composant de votre application.
+   
+   Vous pouvez écrire à la fois des tests d'intégration et des tests unitaires en Python. Pour 
+   écrire un test unitaire pour la fonction intégrée sum(), vous devez vérifier la sortie de sum() 
+   par rapport à une sortie connue.
+  
+   Par exemple, voici comment vous vérifiez que la somme des nombres (2, 2, 3) est égal à 7 :
+   
+   ```python
+   assert sum([2,2,3]) == 7, "doit être 7"
+   ```
+   
+   cela n'affichera rien car les valeurs sont correctes. 
+   Si le résultat de sum() est incorrect, cela echouera avec un *AssertionError* et le message 
+   "doit être 7"
+   
+  ![test0](/img/assert_sum.png)
+  
+  Voyons comment ecrire une fonction pour faire notre test :
+  ```python
+  def test_sum():
+    assert sum([2,2,3]) == 7, "doit être 7"
+   
+   if __name__ == "main":
+     test_sum()
+     print("Tout est passé !")
+  ```
+  
+  Nous avons maintenant écrit un cas de test , une assertion et un point d'entrée. Nous pouvons maintenant exécuter ceci et on verra le message "Tout est passé !"  car le résultat est exacte.
+  
+  En Python, sum() accepte tout itérable comme premier argument. Nous avons testé avec une liste. Maintenant, testons également avec un tuple. Créez un nouveau fichier appelé test_sum_2.py avec le code suivant :
+  
+  ```python
+  def test_sum():
+    assert sum([2, 2, 3]) == 7, "doit être 7"
 
-# Foo:
+def test_sum_tuple():
+    assert sum((4, 2, 2)) == 7, "doit être 7"
 
-foo bar baz
+if __name__ == "__main__":
+    test_sum()
+    test_sum_tuple()
+    print("Tout est passé !")
+    
+  ```
+  
+  Lorsque vous exécutez test_sum_2.py, le script génère une erreur car la somme de (4, 2, 2) est 8, et non 7. Le résultat du script vous donne le message d'erreur :
+  
+  ![fonction_test](/img/fonction_test.png)
+   
+Ici, vous pouvez voir comment une erreur dans votre code génère une erreur sur la console avec des informations sur l'emplacement de l'erreur et le résultat attendu.
 
-```python
-# module foo.py
+Écrire des tests de cette manière est acceptable pour une simple vérification, mais que se passe-t-il si plusieurs échouent ? C'est là qu'interviennent les *test runners* ou lanceurs de test. Le test runner est une application spéciale conçue pour exécuter des tests, vérifier la sortie et vous donner des outils pour déboguer et diagnostiquer les tests et les applications.
 
-a = 42
+   iii.  **Choisir un testeur** <a class="encre" id="choix_testeur"></a>
 
-def bar(x):
-    print(x)
-```
+Il existe de nombreux testeurs disponibles pour Python. Celui intégré à la bibliothèque standard Python s'appelle unittest. Dans ce article, nous utiliserons des scénarios de test *unittest* et *unittest test runner*. Les principes de unittest sont facilement transférables à d'autres frameworks. Les trois test runner les plus populaires sont :
+
+  * unittest
+  * nose ou nose2
+  * pytest
+  
+Il est important de choisir le meilleur testeur pour vos besoins et votre niveau d'expérience.
