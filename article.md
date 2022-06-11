@@ -118,7 +118,10 @@ Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et �
    Si le résultat de sum() est incorrect, cela echouera avec un *AssertionError* et le message 
    "doit être 7"
    
-  ![test0](/img/assert_sum.png)
+    >>> assert sum([2, 4, 5]) == 7, "doit être 7"
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    AssertionError: doit être 7
   
   Voyons comment ecrire une fonction pour faire notre test :
   ```python
@@ -150,7 +153,13 @@ if __name__ == "__main__":
   
   Lorsque vous exécutez test_sum_2.py, le script génère une erreur car la somme de (4, 2, 2) est 8, et non 7. Le résultat du script vous donne le message d'erreur :
   
-  ![fonction_test](/img/fonction_test.png)
+    Traceback (most recent call last):
+    File "/Users/gredey/Documents/test_sum2.py", line 9, in <module>
+    test_sum_tuple()
+    File "/Users/gredey/Documents/test_sum2.py", line 5, in test_sum_tuple
+    assert sum((4, 2, 2)) == 7, "doit être 7"
+    AssertionError: doit être 7
+
    
 Ici, vous pouvez voir comment une erreur dans votre code génère une erreur sur la console avec des informations sur l'emplacement de l'erreur et le résultat attendu.
 
@@ -427,6 +436,37 @@ unittest est livré avec de nombreuses méthodes pour affirmer les valeurs, les 
   mieux qu'il soit refactorisé. Suivre le principe de responsabilité unique est un excellent moyen 
   de concevoir du code qui facilite l'écriture de tests unitaires simples et répétables pour des 
   applications fiables.
+  
+  
+ 3. Exécution de votre premier test <a class = "encre" id="execution"></a>
+ 
+  Maintenant que vous avez créé le premier test, vous souhaitez l'exécuter. Bien sûr, vous savez que cela va réussir, mais avant de créer des tests plus complexes, vous devez vérifier que vous pouvez exécuter les tests avec succès.
+  
+   * Exécution des testeurs
+   L'application Python qui exécute votre code de test, vérifie les assertions et vous donne les résultats des tests dans votre console,  est appelée test runner .
+
+Au bas de test.py, vous avez ajouté ce petit extrait de code :
+
+```python
+if __name__ == '__main__':
+    unittest.main()
+```
+
+Il s'agit d'un point d'entrée de la ligne de commande. Cela signifie que si vous exécutez le script  python seul test.py sur la ligne de commande, il appellera unittest.main(). Cela exécutera le lanceur de test en découvrant toutes les classes de ce fichier qui héritent de unittest.TestCase.
+
+C'est l'une des nombreuses façons d'exécuter le testeur unittest . Lorsque vous avez un seul fichier de test nommé test.py, l'appel python test.py est un excellent moyen de commencer.
+
+Une autre méthode consiste à utiliser la ligne de commande unittest . Essaye ça:
+
+    python -m unittest test
+   
+ Cela exécutera le même module de test (appelé test) via la ligne de commande.
+
+Vous pouvez fournir des options supplémentaires pour modifier la sortie. L'un d'eux est -v pour verbeux. Essayez cela ensuite :
+
+    python -m unittest -v test
+
+
  
 
 
