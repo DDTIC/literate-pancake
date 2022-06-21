@@ -639,7 +639,7 @@ Vous pouvez ensuite exécuter les scénarios de test à l'aide de la commande py
 
 Plus d'informations sont disponibles sur le [site Web de documentation de Flask](https://flask.palletsprojects.com/en/0.12.x/testing/) .
 
-5. **Scénarios de test plus avancés** <a class="encre" id="scenario"></a>
+5. **Scénarios de test plus avancés**
 
 Avant de se lancer dans la création de tests pour votre application, souvenez-vous des trois étapes de base de chaque test :
 
@@ -696,3 +696,439 @@ if __name__ == '__main__':
   Ce cas de test ne réussira désormais que si somme(data) déclenche un TypeError. Vous pouvez remplacer TypeError par n'importe quel type d'exception de votre choix.
   
   * Isoler les comportements dans votre application
+  
+Plus tôt dans l'article, nous avons appris ce qu'est un effet secondaire. Les effets secondaires rendent les tests unitaires plus difficiles car, chaque fois qu'un test est exécuté, il peut donner un résultat différent, ou pire encore, un test peut avoir un impact sur l'état de l'application et faire échouer un autre test !
+
+Il existe quelques techniques simples que vous pouvez utiliser pour tester les parties de votre application qui ont de nombreux effets secondaires :
+
+    -  Refonte du code pour suivre le principe de responsabilité unique 
+    -  fair un mock de n'importe quel appel de méthode ou de fonction pour supprimer 
+     les effets secondaires 
+    -  Utilisation des tests d'intégration au lieu des tests unitaires pour cette partie 
+     de l'application
+     
+Si vous n'êtes pas familier avec les mocks, consultez [ Python CLI Testing ](https://realpython.com/python-cli-testing/#mocks) pour quelques bons exemples.
+
+* **Rédaction de tests d'intégration**
+
+Jusqu'à présent, vous avez principalement appris les tests unitaires. Les tests unitaires sont un excellent moyen de créer un code prévisible et stable. Mais en fin de compte, votre application doit fonctionner dès qu'elle démarre !
+
+Les tests d'intégration consistent à tester plusieurs composants de l'application pour vérifier qu'ils fonctionnent ensemble. Les tests d'intégration peuvent nécessiter d'agir comme un consommateur ou un utilisateur de l'application en :
+
+    -  Appel d'une API REST HTTP
+    -  Appel d'une API Python
+    -  Appeler un service Web
+    -  Exécution d'une ligne de commande
+    
+Chacun de ces types de tests d'intégration peut être écrit de la même manière qu'un test unitaire, en suivant le modèle Input, Execute et Assert. La différence la plus significative est que les tests d'intégration vérifient plus de composants à la fois et auront donc plus d'effets secondaires qu'un test unitaire. De plus, les tests d'intégration nécessiteront la mise en place de plus de dispositifs, comme une base de données, une prise réseau ou un fichier de configuration.
+
+C'est pourquoi il est important de séparer vos tests unitaires et vos tests d'intégration. La création de dispositifs requis pour une intégration telle qu'une base de données de test et les cas de test eux-mêmes prennent souvent beaucoup plus de temps à s'exécuter que les tests unitaires, vous pouvez donc ne vouloir exécuter les tests d'intégration qu'une seule fois avant de passer en production au lieu de le faire à chaque validation.
+
+Un moyen simple de séparer les tests unitaires et d'intégration consiste simplement à les placer dans des dossiers différents :
+
+      project/
+            │
+            ├── my_app/
+            │   └── __init__.py
+                │
+                └── tests/
+                    |
+                    ├── unit/
+                    |   ├── __init__.py
+                    |   └── test_sum.py
+                    |
+                    └── integration/
+                        ├── __init__.py
+                        └── test_integration.py
+                        
+ Il existe de nombreuses façons d'exécuter uniquement un groupe sélectionné de tests. Le paramètre de spécification du répertoire source, -s, peut être ajouté au chemin des tests contenant unittest discover  :
+ 
+     python -m unittest discover -s tests/integration
+ 
+ unittest vous aura donné les résultats de tous les tests du répertoire tests/integration .
+ 
+ *  **Tester des applications basées sur les données**
+
+De nombreux tests d'intégration nécessiteront des données backend comme une base de données pour exister avec certaines valeurs. Par exemple, vous souhaiterez peut-être avoir un test qui vérifie que l'application s'affiche correctement avec plus de 100 clients dans la base de données, ou que la page de commande fonctionne même si les noms de produits sont affichés en japonais.
+
+Ces types de tests d'intégration dépendront de différents dispositifs de test pour s'assurer qu'ils sont reproductibles et prévisibles.
+
+Une bonne technique à utiliser consiste à stocker les données de test dans un dossier de votre dossier de test d'intégration appelé fixtures pour indiquer qu'il contient des données de test. Ensuite, dans vos tests, vous pouvez charger les données et exécuter le test.
+
+Voici un exemple de cette structure si les données étaient constituées de fichiers JSON :
+
+                project/
+                      │
+                      ├── my_app/
+                      │   └── __init__.py
+                      │
+                      └── tests/
+                          |
+                          └── unit/
+                          |   ├── __init__.py
+                          |   └── test_sum.py
+                          |
+                          └── integration/
+                              |
+                              ├── fixtures/
+                              |   ├── test_basic.json
+                              |   └── test_complex.json
+                              |
+                              ├── __init__.py
+                              └── test_integration.py
+                              
+ Dans votre scénario de test, vous pouvez utiliser la méthode setUp() pour charger les données de test à partir d'un fichier et exécuter de nombreux tests sur ces données de test. N'oubliez pas que vous pouvez avoir plusieurs cas de test dans un seul fichier Python, et unittest exécutera les deux. Vous pouvez avoir un scénario de test pour chaque ensemble de données de test :
+ 
+ ```python
+ 
+import unittest
+
+
+class TestBasic(unittest.TestCase):
+    def setUp(self):
+        # Load test data
+        self.app = App(database='fixtures/test_basic.json')
+
+    def test_customer_count(self):
+        self.assertEqual(len(self.app.customers), 100)
+
+    def test_existence_of_customer(self):
+        customer = self.app.get_customer(id=10)
+        self.assertEqual(customer.name, "Org XYZ")
+        self.assertEqual(customer.address, "10 Red Road, Reading")
+
+
+class TestComplexData(unittest.TestCase):
+    def setUp(self):
+        # load test data
+        self.app = App(database='fixtures/test_complex.json')
+
+    def test_customer_count(self):
+        self.assertEqual(len(self.app.customers), 10000)
+
+    def test_existence_of_customer(self):
+        customer = self.app.get_customer(id=9999)
+        self.assertEqual(customer.name, u"バナナ")
+        self.assertEqual(customer.address, "10 Red Road, Akihabara, Tokyo")
+
+if __name__ == '__main__':
+    unittest.main()
+    
+```
+
+Si votre application dépend de données provenant d'un emplacement distant, comme une API distante , vous devez vous assurer que vos tests sont reproductibles. Si vos tests échouent parce que l'API est hors ligne ou s'il y a un problème de connectivité, cela pourrait ralentir le développement. Dans ces types de situations, il est préférable de stocker localement les données distants afin qu'elles puissent être accessible  à l'application.
+
+La bibliothèque requests  propose un package gratuit appelé responses qui vous permet de créer des dispositifs de réponse et de les enregistrer dans vos dossiers de test. En savoir plus [sur leur page GitHub](https://github.com/getsentry/responses).
+
+6.  Tests dans plusieurs environnements
+
+Jusqu'à présent, vous avez testé une seule version de Python en utilisant un environnement virtuel avec un ensemble spécifique de dépendances. Vous voudrez peut-être vérifier que votre application fonctionne sur plusieurs versions de Python ou sur plusieurs versions d'un package. Tox est une application qui automatise les tests dans plusieurs environnements.
+
+* Installation de Tox
+
+Tox est disponible sur PyPI sous forme de package à installer via pip:
+
+        pip install tox
+        
+ Maintenant que Tox est installé, il doit être configuré.
+ 
+ *  Configuration de Tox pour vos dépendances
+
+Tox est configuré via un fichier de configuration dans votre répertoire de projet. Le fichier de configuration Tox contient les éléments suivants :
+
+        -  La commande à exécuter pour exécuter des tests
+        -  Tous les packages supplémentaires requis avant l'exécution
+        -  Les versions cibles de Python à tester
+
+Au lieu d'avoir à apprendre la syntaxe de configuration de Tox, vous pouvez prendre une longueur d'avance en exécutant l'application de démarrage rapide :
+
+          tox-quickstart
+          
+ L'outil de configuration Tox vous posera ces questions et créera un fichier tox.ini :
+ 
+ ```Config file
+[tox]
+envlist = py27, py36
+
+[testenv]
+deps =
+
+commands =
+    python -m unittest discover
+ ```
+ 
+ Avant de pouvoir exécuter Tox, il faut que vous disposiez d'un fichier setup.py dans votre dossier d'application contenant les étapes d'installation de votre package. Si vous n'en avez pas, vous pouvez suivre ce [guide](https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py) sur la façon de créer un setup.py avant de continuer.
+
+Alternativement, si votre projet n'est pas destiné à être distribué sur PyPI, vous pouvez ignorer cette exigence en ajoutant la ligne suivante dans le fichier tox.ini sous l'en-tête [tox] :
+
+          [tox]
+          envlist = py27, py36
+          skipsdist=True
+          
+Une fois que vous avez terminé cette étape, vous êtes prêt à exécuter les tests.
+
+Vous pouvez maintenant exécuter Tox, et cela créera deux environnements virtuels : un pour Python 2.7 et un pour Python 3.6. Le répertoire Tox s'appelle .tox/. Dans le répertoire .tox/, Tox exécutera python -m unittest discover sur chaque environnement virtuel.
+
+Vous pouvez exécuter ce processus en appelant Tox sur la ligne de commande :
+
+              $ tox
+              
+Tox affichera les résultats de vos tests par rapport à chaque environnement. La première fois qu'il s'exécute, Tox prend un peu de temps pour créer les environnements virtuels, mais une fois qu'il l'a fait, la deuxième exécution sera beaucoup plus rapide.
+
+*  Exécuter Tox
+
+La sortie de Tox est assez simple. Il crée un environnement pour chaque version, installe vos dépendances, puis exécute les commandes de test.
+
+Il existe quelques options de ligne de commande supplémentaires qu'il est bon de retenir.
+
+N'exécutez qu'un seul environnement, tel que Python 3.6 :
+
+      tox -e py36
+ 
+Recréez les environnements virtuels, au cas où vos dépendances auraient changé ou si les packages de site seraient corrompus :
+
+      tox -r
+      
+ Exécutez Tox avec une sortie moins détaillée :
+  
+      tox -q
+      
+  Exécution de Tox avec une sortie plus détaillée :
+   
+       $ tox -v
+       
+Vous trouverez plus d'informations sur Tox sur le site Web de [documentation Tox](https://tox.wiki/en/latest/) .
+
+7.  **Automatiser l'exécution de vos tests**
+
+Jusqu'à présent, vous avez exécuté les tests manuellement en exécutant une commande. Il existe des outils pour exécuter automatiquement des tests lorsque vous apportez des modifications et que vous les validez dans un référentiel de dépôt de source  tel que Git. Les outils de test automatisés sont souvent connus sous le nom d'outils CI/CD, qui signifie « Intégration continue/Déploiement continu ». Ils peuvent exécuter vos tests, compiler et publier toutes les applications, et même les déployer en production.
+
+*Travis CI* est l'un des nombreux services CI ( intégration continue ) disponibles.
+
+Travis CI fonctionne bien avec Python, et maintenant que vous avez créé tous ces tests, vous pouvez automatiser leur exécution dans le cloud ! Travis CI est gratuit pour tous les projets open-source sur GitHub et GitLab et est disponible moyennant des frais pour les projets privés.
+
+Pour commencer, connectez-vous au site Web et authentifiez-vous avec vos identifiants GitHub ou GitLab. Créez ensuite un fichier appelé .travis.yml avec le contenu suivant :
+
+```yaml
+language: python
+python:
+  - "2.7"
+  - "3.7"
+install:
+  - pip install -r requirements.txt
+script:
+  - python -m unittest discover
+```
+       
+       
+Cette configuration demande à Travis CI de :
+
+       - Testez avec Python 2.7 et 3.7 (vous pouvez remplacer ces versions par celles 
+        de votre choix.)
+       -  Installez tous les packages qui sont listé dans requirements.txt(vous devez 
+        supprimer cette section si vous n'avez aucune dépendance.)
+       -  Exécuter python -m unittest discover pour exécuter les tests
+
+Une fois que vous avez validé et pusher ce fichier, Travis CI exécutera ces commandes vers votre référentiel Git distant. Vous pouvez consulter les résultats sur leur site web.
+
+8.  **Et après**
+
+Maintenant que vous avez appris à créer des tests, à les exécuter, à les inclure dans votre projet et même à les exécuter automatiquement, il existe quelques techniques avancées que vous pourriez trouver utiles à mesure que votre bibliothèque de tests se développe.
+
+*  Introduire des linters dans votre application
+
+Tox et Travis CI ont une configuration pour une commande de test. La commande de test que vous avez utilisée tout au long de ce article est *python -m unittest discover*.
+
+Vous pouvez fournir une ou plusieurs commandes dans tous ces outils, et cette option est là pour vous permettre d'ajouter plus d'outils qui améliorent la qualité de votre application.
+
+Un tel type d'application est appelé linter. Un linter regardera votre code et le commentera. Il pourrait vous donner des conseils sur les erreurs que vous avez commises, corriger les espaces de fin et même prédire les bogues que vous pourriez avoir introduits.
+
+Pour plus d'informations sur les linters, lisez le [tutoriel Python Code Quality](https://realpython.com/python-code-quality/) .
+
+* Peluchage passif avec flake8
+
+Un linter populaire qui commente le style de votre code par rapport à la spécification [PEP 8 ](https://www.youtube.com/watch?v=Hwckt4J96dI) est flake8.
+
+Vous pouvez installer flake8 en utilisant pip:
+
+          pip install flake8
+          
+ Vous pouvez ensuite parcourir flake8 un seul fichier, un dossier ou un modèle :
+ 
+          flake8 test.py
+          test.py:6:1: E302 expected 2 blank lines, found 1
+          test.py:23:1: E305 expected 2 blank lines after class or function definition, 
+           found 1
+          test.py:24:20: W292 no newline at end of file
+          
+Vous verrez une liste d'erreurs et d'avertissements pour votre code flake8 trouvé.
+
+flake8 est configurable sur la ligne de commande ou dans un fichier de configuration de votre projet. Si vous souhaitez ignorer certaines règles, comme E305 indiqué ci-dessus, vous pouvez les définir dans la configuration. flake8 inspectera un fichier .flake8  dans le dossier du projet ou un fichier setup.cfg . Si vous avez décidé d'utiliser Tox, vous pouvez mettre la section de configuration de flake8   dans tox.ini.
+
+Cet exemple ignore les répertoires .git et  __pycache__  ainsi que la règle E305 . En outre, il définit la longueur de ligne maximale sur 90 au lieu de 80 caractères. Vous constaterez probablement que la contrainte par défaut de 79 caractères pour la largeur de ligne est très restrictive pour les tests, car ils contiennent des noms de méthode longs, des littéraux de chaîne avec des valeurs de test et d'autres éléments de données qui peuvent être plus longs. Il est courant de définir la longueur de ligne pour les tests jusqu'à 120 caractères :
+
+```yaml
+[flake8]
+ignore = E305
+exclude = .git,__pycache__
+max-line-length = 90
+```
+   
+Vous pouvez également fournir ces options sur la ligne de commande :
+
+        flake8 --ignore E305 --exclude .git,__pycache__ --max-line-length=90
+        
+ Une liste complète des options de configuration est disponible sur le [site Web de documentation](https://flake8.pycqa.org/en/latest/user/options.html) .
+
+Vous pouvez maintenant ajouter flake8 à votre configuration CI. Pour Travis CI, cela ressemblerait à ceci :
+
+```yaml
+matrix:
+  include:
+    - python: "2.7"
+      script: "flake8"
+```
+
+Travis lira la configuration .flake8 et échouera la construction si des erreurs de peluchage se produisent. Assurez-vous d'ajouter la dépendance flake8  à votre fichier requirements.txt .
+
+*  Peluchage agressif avec un formateur de code
+
+flake8 est un linter passif : il recommande des modifications, mais vous devez aller modifier le code. Une approche plus agressive est un formateur de code. Les formateurs de code modifieront automatiquement votre code pour répondre à un ensemble de pratiques de style et de mise en page.
+
+*black* est un formateur très impitoyable. Il n'a pas d'options de configuration et il a un style très spécifique. Cela en fait un outil idéal à mettre dans votre pipeline de test.
+
+        Remarque : black nécessite Python 3.6+.
+        
+ Vous pouvez installer black via pip :
+ 
+          pip install black
+          
+  Ensuite, pour exécuter black en ligne de commande, indiquez le fichier ou le répertoire que vous souhaitez formater :
+  
+          black test.py
+          
+  *  Garder votre code de test propre
+
+Lors de l'écriture de tests, vous constaterez peut-être que vous finissez par copier et coller beaucoup plus de code que vous ne le feriez dans des applications classiques. Les tests peuvent parfois être très répétitifs, mais ce n'est en aucun cas une raison pour laisser votre code bâclé et difficile à maintenir.
+
+Au fil du temps, vous développerez beaucoup de [*technical debt*](https://martinfowler.com/bliki/TechnicalDebt.html) dans votre code de test, et si vous apportez des modifications importantes à votre application qui nécessitent des modifications de vos tests, cela peut être une tâche plus lourde que nécessaire en raison de la façon dont vous les avez structurés.
+
+Essayez de suivre le principe **DRY** lors de la rédaction des tests : **D**on’t **R**epeat **Y**ourself.
+
+Les fixtures et les fonctions de test sont un excellent moyen de produire un code de test plus facile à entretenir. Aussi, la lisibilité compte. Envisagez de déployer un outil de filtrage comme flake8 sur votre code de test :
+
+        flake8 --max-line-length=120 tests/
+        
+  *  Test de la dégradation des performances entre les modifications
+
+Il existe de nombreuses façons de comparer le code en Python. La bibliothèque standard fournit le module timeit , qui peut chronométrer les fonctions un certain nombre de fois et vous donner la distribution. Cet exemple exécutera 100 fois test() et affichera le résultat :
+
+```python
+def test():
+    # ... your code
+
+if __name__ == '__main__':
+    import timeit
+    print(timeit.timeit("test()", setup="from __main__ import test", number=100))
+```
+
+Une autre option, si vous avez décidé de l'utiliser comme un testeur pytest  , le plugin pytest-benchmark  sera utilisé. Cela fournit un dispositif pytest  appelé benchmark. Vous pouvez passer benchmark(), et il enregistrera la synchronisation dans les résultats de pytest.
+
+Vous pouvez installer pytest-benchmark depuis PyPI en utilisant pip:
+
+          pip install pytest-benchmark
+          
+ Ensuite, vous pouvez ajouter un test qui utilise le fixture et passe à exécution :
+ 
+ ```python
+ 
+ def test_my_function(benchmark):
+ result = benchmark(test)
+ 
+ ```
+ 
+ L'exécution de pytest vous donnera des résultats de référence.
+ Plus d'informations sont disponibles sur le [site Web de la documentation](https://pytest-benchmark.readthedocs.io/en/latest/) .
+ 
+ * Test des failles de sécurité dans votre application
+
+Un autre test que vous voudrez exécuter sur votre application consiste à vérifier les erreurs ou les vulnérabilités de sécurité courantes.
+
+Vous pouvez installer *bandit* depuis PyPI en utilisant pip:
+
+      pip install bandit
+      
+      Last login: Tue Jun 21 17:26:45 on console
+(base) gredey@MacBook-Pro-de-OUEDRAOGO-2 ~ % pip3 install bandit
+Collecting bandit
+  Downloading bandit-1.7.4-py3-none-any.whl (118 kB)
+     |████████████████████████████████| 118 kB 399 kB/s 
+Requirement already satisfied: PyYAML>=5.3.1 in ./opt/anaconda3/lib/python3.9/site-packages (from bandit) (6.0)
+Collecting stevedore>=1.20.0
+  Downloading stevedore-3.5.0-py3-none-any.whl (49 kB)
+     |████████████████████████████████| 49 kB 3.8 MB/s 
+Collecting GitPython>=1.0.1
+  Downloading GitPython-3.1.27-py3-none-any.whl (181 kB)
+     |████████████████████████████████| 181 kB 157 kB/s 
+Collecting gitdb<5,>=4.0.1
+  Downloading gitdb-4.0.9-py3-none-any.whl (63 kB)
+     |████████████████████████████████| 63 kB 1.1 MB/s 
+Collecting smmap<6,>=3.0.1
+  Downloading smmap-5.0.0-py3-none-any.whl (24 kB)
+Collecting pbr!=2.1.0,>=2.0.0
+  Downloading pbr-5.9.0-py2.py3-none-any.whl (112 kB)
+     |████████████████████████████████| 112 kB 603 kB/s 
+Installing collected packages: smmap, pbr, gitdb, stevedore, GitPython, bandit
+Successfully installed GitPython-3.1.27 bandit-1.7.4 gitdb-4.0.9 pbr-5.9.0 smmap-5.0.0 stevedore-3.5.0
+(base) gredey@MacBook-Pro-de-OUEDRAOGO-2 ~ % 
+      
+Vous pouvez ensuite passer le nom de votre module applicatif avec le paramètre -r , et cela vous donnera un résumé :
+
+  (base) gredey@MacBook-Pro-de-OUEDRAOGO-2 testing % bandit -r ma_somme
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.9.7
+Run started:2022-06-21 20:47:35.782311
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 5
+	Total lines skipped (#nosec): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+Files skipped (0):
+(base) gredey@MacBook-Pro-de-OUEDRAOGO-2 testing % 
+
+Comme pour flake8, les règles bandit signalées sont configurables, et s'il y en a que vous souhaitez ignorer, vous pouvez ajouter la section suivante à votre fichier setup.cfg  avec les options :
+
+            [bandit]
+            exclude: /test
+            tests: B101,B102,B301
+            
+ Plus de détails sont disponibles sur le [site Web GitHub](https://github.com/PyCQA/bandit) .
+ 
+ 
+###  Conclusion 
+
+Python a rendu les tests accessibles en intégrant les commandes et les bibliothèques dont vous avez besoin pour valider que vos applications fonctionnent comme prévu. Commencer à tester en Python n'a pas besoin d'être compliqué : vous pouvez utiliser unittest et écrire de petites méthodes maintenables pour valider votre code.
+
+Au fur et à mesure que vous en apprendrez davantage sur les tests et que votre application se développera, vous pourrez envisager de passer à l'un des autres frameworks de test, comme pytest, et commencer à tirer parti de fonctionnalités plus avancées.
+
+      
+
+
+   
