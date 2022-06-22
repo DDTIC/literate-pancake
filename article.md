@@ -1140,20 +1140,19 @@ Au fur et à mesure que vous en apprendrez davantage sur les tests et que votre 
 
 ## Bibliographie <a class="encre" id="biblio"></a>
 
-[https://docs.python.org/fr/3/library/unittest.html](https://docs.python.org/fr/3/library/unittest.html)
-[https://docs.pytest.org/en/latest/](https://docs.pytest.org/en/latest/)
-[https://docs.djangoproject.com/en/2.1/topics/testing/overview/](https://docs.djangoproject.com/en/2.1/topics/testing/overview/)
-[https://flask.palletsprojects.com/en/0.12.x/testing/](https://flask.palletsprojects.com/en/0.12.x/testing/)
-[https://realpython.com/python-cli-testing/#mocks](https://realpython.com/python-cli-testing/#mocks)
-[https://flask.palletsprojects.com/en/0.12.x/testing/](https://flask.palletsprojects.com/en/0.12.x/testing/)
-[https://github.com/getsentry/responses](https://github.com/getsentry/responses)
-[https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py](https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py)
-[https://tox.wiki/en/latest/](https://tox.wiki/en/latest/)
-[https://realpython.com/python-code-quality/](https://realpython.com/python-code-quality/)
-[https://www.youtube.com/watch?v=Hwckt4J96dI](https://www.youtube.com/watch?v=Hwckt4J96dI)
-[https://flake8.pycqa.org/en/latest/user/options.html](https://flake8.pycqa.org/en/latest/user/options.html)
-[https://martinfowler.com/bliki/TechnicalDebt.htm](https://martinfowler.com/bliki/TechnicalDebt.htm)
-[https://pytest-benchmark.readthedocs.io/en/latest/](https://pytest-benchmark.readthedocs.io/en/latest/)
+[https://docs.python.org/fr/3/library/unittest.html](https://docs.python.org/fr/3/library/unittest.html) 
+[https://docs.pytest.org/en/latest/](https://docs.pytest.org/en/latest/) 
+[https://docs.djangoproject.com/en/2.1/topics/testing/overview/](https://docs.djangoproject.com/en/2.1/topics/testing/overview/) 
+[https://flask.palletsprojects.com/en/0.12.x/testing/](https://flask.palletsprojects.com/en/0.12.x/testing/) 
+[https://realpython.com/python-cli-testing/#mocks](https://realpython.com/python-cli-testing/#mocks) 
+[https://flask.palletsprojects.com/en/0.12.x/testing/](https://flask.palletsprojects.com/en/0.12.x/testing/) 
+[https://github.com/getsentry/responses](https://github.com/getsentry/responses) 
+[https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py](https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py) 
+[https://tox.wiki/en/latest/](https://tox.wiki/en/latest/) 
+[https://realpython.com/python-code-quality/](https://realpython.com/python-code-quality/)[https://www.youtube.com/watch?v=Hwckt4J96dI](https://www.youtube.com/watch?v=Hwckt4J96dI) 
+[https://flake8.pycqa.org/en/latest/user/options.html](https://flake8.pycqa.org/en/latest/user/options.html) 
+[https://martinfowler.com/bliki/TechnicalDebt.htm](https://martinfowler.com/bliki/TechnicalDebt.htm) 
+[https://pytest-benchmark.readthedocs.io/en/latest/](https://pytest-benchmark.readthedocs.io/en/latest/) 
 [https://github.com/PyCQA/bandit](https://github.com/PyCQA/bandit)
 
 
