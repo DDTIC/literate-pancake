@@ -1,5 +1,9 @@
 
-### Table des matières
+# Les tests en python
+
+
+
+## Table des matières
 
 * [Introduction](#intro)
 * [Tester votre code](#test_code)
@@ -36,18 +40,20 @@
     * [Test de la dégradation des performances entre les modifications](#degradation)
     * [Test des failles de sécurité dans votre application](#securite)
 * [Conclusion](#conclusion)
+* [Bibliographie](#biblio)
 
-### Introduction  <a class="encre" id="intro"></a>
+
+## Introduction  <a class="encre" id="intro"></a>
 Les tests en Python sont un sujet énorme et peuvent avoir l'ère d' être très complexes à mettre en oeuvre, mais cela n'est pas le cas. Le programmeur python peut commencer à créer des tests simples pour son application en quelques étapes simples, puis les développer à partir de là.
 
 Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et à trouver les bogues avant nos utilisateurs ! nous découvriront les outils disponibles pour écrire et exécuter des tests, vérifier les performances de notre application et même rechercher des problèmes de sécurité.
 
-1. **Tester votre code**  <a class="encre" id="test_code"></a>
+## Tester votre code  <a class="encre" id="test_code"></a>
     
    Il existe de nombreuses façons de tester un code en python.  Nous apprendrons les  
    techniques des étapes les plus élémentaires et travaillerons vers des méthodes avancées.
     
-    1. **Tests automatisés ou manuels** <a class="encre" id="auto_manuel"></a>
+### Tests automatisés ou manuels <a class="encre" id="auto_manuel"></a>
     
    La bonne nouvelle est que vous avez probablement déjà créé un test sans vous en rendre   
    compte. Vous souvenez-vous quand vous avez exécuté votre application et que vous l'avez    
@@ -71,7 +77,7 @@ Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et �
    des tests automatisés pour votre application. Nous allons explorer ces outils et bibliothèques 
    dans ce article.
     
-   2. **Tests unitaires vs tests d'intégration** <a class="encre" id="unit_inte"></a>
+### Tests unitaires vs tests d'intégration <a class="encre" id="unit_inte"></a>
     
    Le monde des tests ne manque pas de terminologie, et maintenant que vous connaissez la  
    différence entre les tests automatisés et manuels, il est temps d'aller plus loin.
@@ -100,9 +106,9 @@ Dans ce article, nous apprendrons à créer un test de base, à l'exécuter et �
    
    Vous venez de voir deux types de tests :
    
-     - Un test d'intégration vérifie que les composants de votre application fonctionnent les uns avec les autres.
+ - Un test d'intégration vérifie que les composants de votre application fonctionnent les uns avec les autres.
      
-     - Un test unitaire vérifie un petit composant de votre application.
+ - Un test unitaire vérifie un petit composant de votre application.
    
    Vous pouvez écrire à la fois des tests d'intégration et des tests unitaires en Python. Pour 
    écrire un test unitaire pour la fonction intégrée sum(), vous devez vérifier la sortie de sum() 
@@ -165,7 +171,7 @@ Ici, vous pouvez voir comment une erreur dans votre code génère une erreur sur
 
 Écrire des tests de cette manière est acceptable pour une simple vérification, mais que se passe-t-il si plusieurs échouent ? C'est là qu'interviennent les *test runners* ou lanceurs de test. Le test runner est une application spéciale conçue pour exécuter des tests, vérifier la sortie et vous donner des outils pour déboguer et diagnostiquer les tests et les applications.
 
-   iii.  **Choisir un testeur** <a class="encre" id="choix_testeur"></a>
+### Choisir un testeur <a class="encre" id="choix_testeur"></a>
 
 Il existe de nombreux testeurs disponibles pour Python. Celui intégré à la bibliothèque standard Python s'appelle unittest. Dans ce article, nous utiliserons des scénarios de test *unittest* et *unittest test runner*. Les principes de unittest sont facilement transférables à d'autres frameworks. Les trois test runner les plus populaires sont :
 
@@ -175,7 +181,8 @@ Il existe de nombreux testeurs disponibles pour Python. Celui intégré à la bi
   
 Il est important de choisir le meilleur testeur pour vos besoins et votre niveau d'expérience.
 
-##### unittest
+#### unittest
+
 unittest est intégré à la bibliothèque standard Python depuis la version 2.1. Vous le verrez probablement dans les applications Python commerciales et les projets open source.
 
 unittest contient à la fois un framework de test et un test runner. unittest a des exigences importantes pour l'écriture et l'exécution des tests.
@@ -211,14 +218,16 @@ unittest nécessite que :
 
 Nous venons d'exécuter deux tests à l'aide du test runner de unittest.
 
-    Remarque : Soyez prudent si vous écrivez des cas de test qui doivent être exécutés à la fois en Python 2 et 3. 
+    Remarque : Soyez prudent si vous écrivez des cas de test qui doivent être exécutés à 
+    la fois en Python 2 et 3. 
     En Python 2.7 et versions antérieures, unittest s'appelle unittest2. 
-     Si vous importez simplement depuis unittest,vous obtiendrez différentes versions avec différentes fonctionnalités entre Python 2 et 3.
+    Si vous importez simplement depuis unittest,vous obtiendrez différentes versions 
+    avec différentes fonctionnalités entre Python 2 et 3.
      
  
  Pour plus d'informations sur unittest, vous pouvez explorer la [documentation de unittest](https://docs.python.org/3/library/unittest.html)
  
-##### nose
+#### nose
 
 Vous constaterez peut-être qu'au fil du temps, alors que vous écrivez des centaines, voire des milliers de tests pour votre application, il devient de plus en plus difficile de comprendre et d'utiliser la sortie de unittest.
 
@@ -254,7 +263,7 @@ Pour commencer avec nose2, installez nose2 à partir de PyPI et exécutez-le sur
 
  Nous venons d'exécuter le test que nous avons créé  test_sum_unittest.py à partir du testeur nose2. nose2 propose de nombreux indicateurs de ligne de commande pour filtrer les tests que vous exécutez. Pour plus d'informations, vous pouvez explorer la [documentation de Nose 2](https://docs.nose2.io/en/latest/) .
  
-##### pytest
+#### pytest
  
  pytest prend en charge l'exécution des cas de test unittest. Le véritable avantage de pytest vient en écrivant des cas de test pytest.  Les cas de test pytest sont une série de fonctions dans un fichier Python commençant par le nom *test_.*
 
@@ -280,7 +289,7 @@ Nous avons supprimé le TestCase, toute utilisation de classes et le point d'ent
 Plus d'informations peuvent être trouvées sur le site Web de [documentation de Pytest](https://docs.pytest.org/en/latest/) .
 
 
-2. Écrire votre premier test <a class="encre" id="premier_test"></a>
+## Écrire votre premier test <a class="encre" id="premier_test"></a>
 
 Rassemblons ce que nous avons appris jusqu'à présent et, au lieu de tester la fonction sum() intégrée, testons une implémentation simple de la même exigence.
 
@@ -306,7 +315,7 @@ Votre dossier de projet devrait ressembler à ceci :
  
  Cet exemple de code crée une variable appelée total, parcourt toutes les valeurs de arg et les ajoute à total. Il renvoie ensuite le résultat une fois l'itérable épuisé.
  
-   * Où ecrire le test <a class="encre" id="ouecrire"></a>
+###  Où ecrire le test <a class="encre" id="ouecrire"></a> 
    
    Pour commencer à écrire des tests, vous pouvez simplement créer un fichier appelé test.py,  
    qui contiendra votre premier cas de test. Étant donné que le fichier devra pouvoir importer 
@@ -328,7 +337,8 @@ Votre dossier de projet devrait ressembler à ceci :
 
     Vous pouvez importer tous les attributs du script, tels que 
     les classes, les fonctions et les variables à l'aide de la  
-    fonction __import__() intégrée. Au lieu de from ma_somme      import sum, vous pouvez écrire ce qui suit :
+    fonction __import__() intégrée. Au lieu de from ma_somme 
+    import sum, vous pouvez écrire ce qui suit :
     
 ```python
           target = __import__("ma_somme.py")
@@ -341,8 +351,7 @@ Votre dossier de projet devrait ressembler à ceci :
     packages de bibliothèque standard. Par exemple, math.py 
     entrerait en collision avec le module math .
     
-  
-  * Comment structurer un test simple <a class="encre" id="structure"></a>
+###  Comment structurer un test simple <a class="encre" id="structure"></a>  
 
 Avant de vous plonger dans l'écriture de tests, vous voudrez d'abord prendre quelques décisions :
 
@@ -398,7 +407,7 @@ Cet exemple de code :
    * Affirmer que la valeur de res est egal à 7 en utilisant la méthode .assertEqual() sur la classe unittest.TestCase 
 4. Définit un point d'entrée de ligne de commande, qui exécute le test-runner unittest .main()
 
-* Comment écrire des assertions
+### Comment écrire des assertions <a class="encre" id="assertion"></a>
 
    La dernière étape de l'écriture d'un test consiste à valider la sortie par rapport à une réponse connue. C'est ce qu'on appelle une affirmation . Il existe quelques bonnes pratiques générales concernant la rédaction des assertions :
    
@@ -419,7 +428,7 @@ unittest est livré avec de nombreuses méthodes pour affirmer les valeurs, les 
 
 .assertIs(), .assertIsNone(), .assertIn(), et .assertIsInstance() ont tous des méthodes opposées, nommées .assertIsNot(), et ainsi de suite.
 
-* Effets secondaires <a class="encre" id="Effets secondaires"></a>
+### Effets secondaires <a class="encre" id="effet_secondaire"></a>
 
    Lorsque vous écrivez des tests, ce n'est souvent pas aussi simple que de regarder la valeur 
    de retour d'une fonction. Souvent, l'exécution d'un morceau de code modifie d'autres 
@@ -437,11 +446,11 @@ unittest est livré avec de nombreuses méthodes pour affirmer les valeurs, les 
   applications fiables.
   
   
- 3. Exécution de votre premier test <a class = "encre" id="execution"></a>
+##  Exécution de votre premier test <a class = "encre" id="execution"></a>
  
   Maintenant que vous avez créé le premier test, vous souhaitez l'exécuter. Bien sûr, vous savez que cela va réussir, mais avant de créer des tests plus complexes, vous devez vérifier que vous pouvez exécuter les tests avec succès.
   
-   * Exécution des testeurs
+### Exécution des testeurs <a class="encre" id="execution_testeur"></a>
    
    L'application Python qui exécute votre code de test, vérifie les assertions et vous donne les résultats des tests dans votre console,  est appelée test runner .
 
@@ -484,10 +493,10 @@ Enfin, si votre code source n'est pas à la racine du répertoire et contenu dan
 
     python -m unittest discover -s tests -t src
     
-Dans le répertoir src/ unittest recherchera tous les fichiers test*.py  à l'intérieur du répertoire tests  et les exécutera.
+Dans le répertoir src/ unittest recherchera tous les fichiers test*.py  à l'intérieur du répertoire tests  et les exécutera.  
+ 
+### Comprendre la sortie de test 
 
-   * Comprendre la sortie de test <a class="encre", id="sortie_test"></a>
-   
 C'était un exemple très simple où tout passe, alors maintenant nous allons essayer un test qui échoue et interpréter la sortie.
 
 sum() devrait pouvoir accepter d'autres listes de types numériques, comme les fractions.
@@ -552,13 +561,13 @@ La première ligne affiche les résultats d'exécution de tous les tests, un éc
 
 L' entrée de l'echec affiche quelques détails sur le test ayant échoué :
 
-     -  Le nom de la méthode de test ( test_list_fraction)
-     -  Le module de test ( test) et le cas de test ( TestSum)
-     -  Une trace jusqu'à la ligne défaillante
-     -  Le détail de l'assertion avec le résultat attendu ( 1) et le résultat réel ( Fraction(9, 10))
-     -  N'oubliez pas que vous pouvez ajouter des informations supplémentaires à la sortie du test en ajoutant le paramètre -v  à la commande python -m unittest.
-   
-* Exécuter vos tests depuis PyCharm <a class="encre",  id="test_pycharme"></a>
+-  Le nom de la méthode de test ( test_list_fraction)
+-  Le module de test ( test) et le cas de test ( TestSum)
+-  Une trace jusqu'à la ligne défaillante
+-  Le détail de l'assertion avec le résultat attendu ( 1) et le résultat réel ( Fraction(9, 10))
+-  N'oubliez pas que vous pouvez ajouter des informations supplémentaires à la sortie du test en ajoutant le paramètre -v  à la commande python -m unittest.
+
+  ### Exécuter vos tests depuis PyCharm    
 
 Si vous utilisez l' IDE PyCharm , vous pouvez exécuter unittest ou pytest en suivant ces étapes :
 
@@ -566,7 +575,7 @@ Dans la fenêtre de l'outil Projet, sélectionnez le répertoire de tests .
 Dans le menu contextuel, choisissez la commande d'exécution pour unittest. Par exemple, choisissez Exécuter 'Unitests in my Tests…' .
 Cela exécutera unittest dans une fenêtre de test et vous donnera les résultats dans PyCharm
 
-* Exécution de vos tests à partir du  Visual Studio code
+### Exécution de vos tests à partir du  Visual Studio code
 
 Si vous utilisez l'IDE Microsoft Visual Studio Code, la prise en charge de unittest, nose et de pytest est intégrée au plug-in Python.
 
@@ -578,11 +587,11 @@ Une fois cela configuré, vous verrez l'état de vos tests en bas de la fenêtre
 
 Cela montre les tests qui sont en cours d'exécution, mais que certains d'entre eux échouent.
 
-4.  **Tester des frameworks Web comme Django et Flask** <a class="encre" id="frameworks"></a>
+## Tester des frameworks Web comme Django et Flask <a class="encre" id="frameworks"></a>
 
    Si vous écrivez des tests pour une application Web en utilisant l'un des frameworks populaires comme Django ou Flask, il existe des différences importantes dans la façon dont vous écrivez et exécutez les tests.
    
-   **Pourquoi elles sont différentes des autres applications**
+### Pourquoi elles sont différentes des autres applications <a class="encre" id="difference"></a>
       
    Pensez à tout le code que vous allez tester dans une application Web. Les itinéraires, les vues et les modèles nécessitent tous beaucoup d'importations et de connaissances sur les frameworks utilisés.
 
@@ -590,7 +599,7 @@ Ceci est similaire au test de la voiture au début de l'article : vous devez dé
 
 Django et Flask vous facilitent la tâche en fournissant un framework de test basé sur unittest. Vous pouvez continuer à écrire des tests comme vous l'avez appris, mais les exécuter légèrement différemment.
 
-   *  **Comment utiliser l'exécuteur de test Django**
+### Comment utiliser l'exécuteur de test Django <a class="encre" id="executeur_django"></a>
    
    Le template startapp de Django  créé un fichier tests.py  dans le répertoire de votre application. Si vous ne l'avez pas déjà, vous pouvez le créer avec le contenu suivant :
    
@@ -612,7 +621,7 @@ Si vous voulez plusieurs fichiers de test, remplacez  tests.py  par un dossier a
 
 Plus d'informations sont disponibles sur le [site web de la documentation de Django](https://docs.djangoproject.com/en/2.1/topics/testing/overview/)
 
-* **Comment utiliser unittest et Flask**
+### Comment utiliser unittest et Flask  <a class="encre" id="unitest_flask"></a> 
   
  Flask nécessite que l'application soit importée puis définie en mode test. Vous pouvez instancier un client de test et utiliser le client de test pour envoyer des requêtes à n'importe quelle route de votre application.
  
@@ -639,7 +648,7 @@ Vous pouvez ensuite exécuter les scénarios de test à l'aide de la commande py
 
 Plus d'informations sont disponibles sur le [site Web de documentation de Flask](https://flask.palletsprojects.com/en/0.12.x/testing/) .
 
-5. **Scénarios de test plus avancés**
+## Scénarios de test plus avancés <a class="encre" id="scenario"></a>
 
 Avant de se lancer dans la création de tests pour votre application, souvenez-vous des trois étapes de base de chaque test :
 
@@ -653,7 +662,7 @@ Les données que vous créez en tant qu'entrée sont appelées **fixture** . Il 
 
 Si vous exécutez le même test et que vous transmettez des valeurs différentes à chaque fois et que vous attendez le même résultat, cela s'appelle la **paramétrisation**.
 
-* Gestion des échecs attendus
+### Gestion des échecs attendus <a class="encre" id="echecs"></a>
 
 Plus tôt, lorsque vous avez dressé une liste de scénarios à tester somme(), une question s'est posée : que se passe-t-il lorsque vous lui fournissez une mauvaise valeur, comme un seul entier ou une chaîne ?
 
@@ -695,7 +704,7 @@ if __name__ == '__main__':
 
   Ce cas de test ne réussira désormais que si somme(data) déclenche un TypeError. Vous pouvez remplacer TypeError par n'importe quel type d'exception de votre choix.
   
-  * Isoler les comportements dans votre application
+### Isoler les comportements dans votre application <a class="encre" id="isoler"></a>
   
 Plus tôt dans l'article, nous avons appris ce qu'est un effet secondaire. Les effets secondaires rendent les tests unitaires plus difficiles car, chaque fois qu'un test est exécuté, il peut donner un résultat différent, ou pire encore, un test peut avoir un impact sur l'état de l'application et faire échouer un autre test !
 
@@ -709,7 +718,7 @@ Il existe quelques techniques simples que vous pouvez utiliser pour tester les p
      
 Si vous n'êtes pas familier avec les mocks, consultez [ Python CLI Testing ](https://realpython.com/python-cli-testing/#mocks) pour quelques bons exemples.
 
-* **Rédaction de tests d'intégration**
+### Rédaction de tests d'intégration <a class="encre" id="test_integration"></a>
 
 Jusqu'à présent, vous avez principalement appris les tests unitaires. Les tests unitaires sont un excellent moyen de créer un code prévisible et stable. Mais en fin de compte, votre application doit fonctionner dès qu'elle démarre !
 
@@ -747,7 +756,7 @@ Un moyen simple de séparer les tests unitaires et d'intégration consiste simpl
  
  unittest vous aura donné les résultats de tous les tests du répertoire tests/integration .
  
- *  **Tester des applications basées sur les données**
+### Tester des applications basées sur les données <a class="encre" id="test_donnees"></a>
 
 De nombreux tests d'intégration nécessiteront des données backend comme une base de données pour exister avec certaines valeurs. Par exemple, vous souhaiterez peut-être avoir un test qui vérifie que l'application s'affiche correctement avec plus de 100 clients dans la base de données, ou que la page de commande fonctionne même si les noms de produits sont affichés en japonais.
 
@@ -820,11 +829,11 @@ Si votre application dépend de données provenant d'un emplacement distant, com
 
 La bibliothèque requests  propose un package gratuit appelé responses qui vous permet de créer des dispositifs de réponse et de les enregistrer dans vos dossiers de test. En savoir plus [sur leur page GitHub](https://github.com/getsentry/responses).
 
-6.  Tests dans plusieurs environnements
+## Tests dans plusieurs environnements <a class="encre" id="environnement"></a>
 
 Jusqu'à présent, vous avez testé une seule version de Python en utilisant un environnement virtuel avec un ensemble spécifique de dépendances. Vous voudrez peut-être vérifier que votre application fonctionne sur plusieurs versions de Python ou sur plusieurs versions d'un package. Tox est une application qui automatise les tests dans plusieurs environnements.
 
-* Installation de Tox
+### Installation de Tox <a class="encre" id="tox"></a>
 
 Tox est disponible sur PyPI sous forme de package à installer via pip:
 
@@ -832,7 +841,7 @@ Tox est disponible sur PyPI sous forme de package à installer via pip:
         
  Maintenant que Tox est installé, il doit être configuré.
  
- *  Configuration de Tox pour vos dépendances
+### Configuration de Tox pour vos dépendances <a class="encre" id="config_tox"></a>
 
 Tox est configuré via un fichier de configuration dans votre répertoire de projet. Le fichier de configuration Tox contient les éléments suivants :
 
@@ -875,7 +884,7 @@ Vous pouvez exécuter ce processus en appelant Tox sur la ligne de commande :
               
 Tox affichera les résultats de vos tests par rapport à chaque environnement. La première fois qu'il s'exécute, Tox prend un peu de temps pour créer les environnements virtuels, mais une fois qu'il l'a fait, la deuxième exécution sera beaucoup plus rapide.
 
-*  Exécuter Tox
+### Exécuter Tox <a class="encre" id="executer_tox"></a>
 
 La sortie de Tox est assez simple. Il crée un environnement pour chaque version, installe vos dépendances, puis exécute les commandes de test.
 
@@ -899,7 +908,7 @@ Recréez les environnements virtuels, au cas où vos dépendances auraient chang
        
 Vous trouverez plus d'informations sur Tox sur le site Web de [documentation Tox](https://tox.wiki/en/latest/) .
 
-7.  **Automatiser l'exécution de vos tests**
+## Automatiser l'exécution de vos tests <a class="encre" id="test_auto"></a>
 
 Jusqu'à présent, vous avez exécuté les tests manuellement en exécutant une commande. Il existe des outils pour exécuter automatiquement des tests lorsque vous apportez des modifications et que vous les validez dans un référentiel de dépôt de source  tel que Git. Les outils de test automatisés sont souvent connus sous le nom d'outils CI/CD, qui signifie « Intégration continue/Déploiement continu ». Ils peuvent exécuter vos tests, compiler et publier toutes les applications, et même les déployer en production.
 
@@ -931,11 +940,11 @@ Cette configuration demande à Travis CI de :
 
 Une fois que vous avez validé et pusher ce fichier, Travis CI exécutera ces commandes vers votre référentiel Git distant. Vous pouvez consulter les résultats sur leur site web.
 
-8.  **Et après**
+## Et après <a class="encre" id="apres"></a>
 
 Maintenant que vous avez appris à créer des tests, à les exécuter, à les inclure dans votre projet et même à les exécuter automatiquement, il existe quelques techniques avancées que vous pourriez trouver utiles à mesure que votre bibliothèque de tests se développe.
 
-*  Introduire des linters dans votre application
+### Introduire des linters dans votre application <a class="encre" id="linter"></a>
 
 Tox et Travis CI ont une configuration pour une commande de test. La commande de test que vous avez utilisée tout au long de ce article est *python -m unittest discover*.
 
@@ -991,7 +1000,7 @@ matrix:
 
 Travis lira la configuration .flake8 et échouera la construction si des erreurs de peluchage se produisent. Assurez-vous d'ajouter la dépendance flake8  à votre fichier requirements.txt .
 
-*  Peluchage agressif avec un formateur de code
+* Peluchage agressif avec un formateur de code
 
 flake8 est un linter passif : il recommande des modifications, mais vous devez aller modifier le code. Une approche plus agressive est un formateur de code. Les formateurs de code modifieront automatiquement votre code pour répondre à un ensemble de pratiques de style et de mise en page.
 
@@ -1007,7 +1016,7 @@ flake8 est un linter passif : il recommande des modifications, mais vous devez a
   
           black test.py
           
-  *  Garder votre code de test propre
+### Garder votre code de test propre <a class="encre" id="test_propre"></a>
 
 Lors de l'écriture de tests, vous constaterez peut-être que vous finissez par copier et coller beaucoup plus de code que vous ne le feriez dans des applications classiques. Les tests peuvent parfois être très répétitifs, mais ce n'est en aucun cas une raison pour laisser votre code bâclé et difficile à maintenir.
 
@@ -1019,7 +1028,7 @@ Les fixtures et les fonctions de test sont un excellent moyen de produire un cod
 
         flake8 --max-line-length=120 tests/
         
-  *  Test de la dégradation des performances entre les modifications
+### Test de la dégradation des performances entre les modifications <a class="encre" id="degradation"></a>
 
 Il existe de nombreuses façons de comparer le code en Python. La bibliothèque standard fournit le module timeit , qui peut chronométrer les fonctions un certain nombre de fois et vous donner la distribution. Cet exemple exécutera 100 fois test() et affichera le résultat :
 
@@ -1050,7 +1059,7 @@ Vous pouvez installer pytest-benchmark depuis PyPI en utilisant pip:
  L'exécution de pytest vous donnera des résultats de référence.
  Plus d'informations sont disponibles sur le [site Web de la documentation](https://pytest-benchmark.readthedocs.io/en/latest/) .
  
- * Test des failles de sécurité dans votre application
+### Test des failles de sécurité dans votre application <a class="encre" id="securite"></a>
 
 Un autre test que vous voudrez exécuter sur votre application consiste à vérifier les erreurs ou les vulnérabilités de sécurité courantes.
 
@@ -1122,11 +1131,31 @@ Comme pour flake8, les règles bandit signalées sont configurables, et s'il y e
  Plus de détails sont disponibles sur le [site Web GitHub](https://github.com/PyCQA/bandit) .
  
  
-###  Conclusion 
+##  Conclusion <a class="encre" id="conclusion"></a>
 
 Python a rendu les tests accessibles en intégrant les commandes et les bibliothèques dont vous avez besoin pour valider que vos applications fonctionnent comme prévu. Commencer à tester en Python n'a pas besoin d'être compliqué : vous pouvez utiliser unittest et écrire de petites méthodes maintenables pour valider votre code.
 
 Au fur et à mesure que vous en apprendrez davantage sur les tests et que votre application se développera, vous pourrez envisager de passer à l'un des autres frameworks de test, comme pytest, et commencer à tirer parti de fonctionnalités plus avancées.
+
+
+## Bibliographie <a class="encre" id="biblio"></a>
+
+[https://docs.python.org/fr/3/library/unittest.html](https://docs.python.org/fr/3/library/unittest.html)
+[https://docs.pytest.org/en/latest/](https://docs.pytest.org/en/latest/)
+[https://docs.djangoproject.com/en/2.1/topics/testing/overview/](https://docs.djangoproject.com/en/2.1/topics/testing/overview/)
+[https://flask.palletsprojects.com/en/0.12.x/testing/](https://flask.palletsprojects.com/en/0.12.x/testing/)
+[https://realpython.com/python-cli-testing/#mocks](https://realpython.com/python-cli-testing/#mocks)
+[https://flask.palletsprojects.com/en/0.12.x/testing/](https://flask.palletsprojects.com/en/0.12.x/testing/)
+[https://github.com/getsentry/responses](https://github.com/getsentry/responses)
+[https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py](https://packaging.python.org/en/latest/tutorials/packaging-projects/#setup-py)
+[https://tox.wiki/en/latest/](https://tox.wiki/en/latest/)
+[https://realpython.com/python-code-quality/](https://realpython.com/python-code-quality/)
+[https://www.youtube.com/watch?v=Hwckt4J96dI](https://www.youtube.com/watch?v=Hwckt4J96dI)
+[https://flake8.pycqa.org/en/latest/user/options.html](https://flake8.pycqa.org/en/latest/user/options.html)
+[https://martinfowler.com/bliki/TechnicalDebt.htm](https://martinfowler.com/bliki/TechnicalDebt.htm)
+[https://pytest-benchmark.readthedocs.io/en/latest/](https://pytest-benchmark.readthedocs.io/en/latest/)
+[https://github.com/PyCQA/bandit](https://github.com/PyCQA/bandit)
+
 
       
 
